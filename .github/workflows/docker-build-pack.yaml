@@ -1,4 +1,4 @@
-name: Build and Push Buttcrack Docker Image
+name: Build and Push PACK Docker Image
 
 on:
   workflow_run:
@@ -9,7 +9,7 @@ on:
   push:
     branches: [ master ]
     paths:
-      - '.github/workflows/docker-build-buttcrack.yaml'
+      - '.github/workflows/docker-build-pack.yaml'
     tags:
       - '**'
   workflow_dispatch:
@@ -44,7 +44,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v5
         with:
-          images: ghcr.io/${{ github.repository_owner }}/buttcrack
+          images: ghcr.io/${{ github.repository_owner }}/pack
           tags: |
             type=ref,event=branch
             type=ref,event=tag

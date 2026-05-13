@@ -14,8 +14,8 @@ RUN touch src/main.rs && cargo build --release
 
 FROM registry.suse.com/bci/bci-micro:latest
 
-COPY --from=builder /app/target/release/buttcrack /usr/local/bin/buttcrack
+COPY --from=builder /app/target/release/pack /usr/local/bin/pack
 
 RUN chmod 1777 /tmp
 
-ENTRYPOINT ["/usr/local/bin/buttcrack"]
+ENTRYPOINT ["/usr/local/bin/pack"]

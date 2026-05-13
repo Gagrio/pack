@@ -6,13 +6,13 @@ on:
     paths:
       - 'src/**'
       - 'Cargo.toml'
-      - '.github/workflows/buttcrack-code-checks.yaml'
+      - '.github/workflows/pack-code-checks.yaml'
   pull_request:
     branches: [ master ]
     paths:
       - 'src/**'
       - 'Cargo.toml'
-      - '.github/workflows/buttcrack-code-checks.yaml'
+      - '.github/workflows/pack-code-checks.yaml'
   workflow_dispatch:
 
 jobs:
