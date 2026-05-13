@@ -14,15 +14,15 @@ mod collector;
 )]
 struct Args {
     /// Comma-separated list of host paths to collect
-    #[arg(short, long, env = "BC_PATHS", value_delimiter = ',', required = true)]
+    #[arg(short, long, env = "PACK_PATHS", value_delimiter = ',', required = true)]
     paths: Vec<String>,
 
     /// Output directory for the archive
-    #[arg(short, long, env = "BC_OUTPUT", default_value = "/tmp")]
+    #[arg(short, long, env = "PACK_OUTPUT", default_value = "/tmp")]
     output: String,
 
     /// Verbose logging
-    #[arg(short, long, env = "BC_VERBOSE", default_value_t = false)]
+    #[arg(short, long, env = "PACK_VERBOSE", default_value_t = false)]
     verbose: bool,
 }
 

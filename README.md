@@ -1,6 +1,6 @@
 # 📦 PACK - Path Archiver Collection Kit
 
-> **Pack it up and ship it out!** 🕵️
+> **Pack it up and ship it out!** 📦
 
 A blazingly fast 🦀 Rust-powered tool that collects arbitrary host paths and archives them into a compressed bundle for upload and investigation.
 
@@ -10,7 +10,7 @@ A blazingly fast 🦀 Rust-powered tool that collects arbitrary host paths and a
 🗜️ **Compressed Archives** - Creates `.tar.gz` archives with timestamped names for easy tracking
 🔒 **Read-Only by Design** - Input paths are always mounted read-only in container mode
 🐳 **Container Ready** - Runs as a privileged container with explicit host path mounts and SELinux support
-⚙️ **Env Var Support** - Every flag has a `BC_*` env var equivalent for Ansible-driven automation
+⚙️ **Env Var Support** - Every flag has a `PACK_*` env var equivalent for Ansible-driven automation
 🔌 **stack-validation Native** - Output naming and archive format designed to plug directly into existing Ansible upload pipelines
 🦀 **Fast & Safe** - Built with Rust for reliable, predictable behaviour under privileged execution
 
@@ -89,16 +89,16 @@ pack --paths /var/lib/rancher/rke2/server/db/etcd --output /tmp
 pack --paths /var/lib/rancher/rke2/server/db/etcd,/var/log/pods --output /tmp
 
 # Using environment variables
-BC_PATHS=/var/lib/rancher/rke2/server/db/etcd BC_OUTPUT=/tmp pack
+PACK_PATHS=/var/lib/rancher/rke2/server/db/etcd PACK_OUTPUT=/tmp pack
 ```
 
 ### Command Line Options
 
 | Option | Short | Env var | Description | Default |
 |--------|-------|---------|-------------|---------|
-| `--paths` | `-p` | `BC_PATHS` | **Required** Comma-separated list of host paths to collect | - |
-| `--output` | `-o` | `BC_OUTPUT` | Output directory for the archive | `/tmp` |
-| `--verbose` | `-v` | `BC_VERBOSE` | Verbose logging | `false` |
+| `--paths` | `-p` | `PACK_PATHS` | **Required** Comma-separated list of host paths to collect | - |
+| `--output` | `-o` | `PACK_OUTPUT` | Output directory for the archive | `/tmp` |
+| `--verbose` | `-v` | `PACK_VERBOSE` | Verbose logging | `false` |
 
 ## 📁 Output Structure
 
@@ -135,13 +135,13 @@ The `_logs_` infix in the archive name is intentional — it allows the existing
 │                             INPUT                               │
 │                                                                 │
 │   CLI flags                       Env vars                      │
-│   --paths /var/lib/etcd,...        BC_PATHS              │
-│   --output /tmp                    BC_OUTPUT             │
+│   --paths /var/lib/etcd,...        PACK_PATHS                   │
+│   --output /tmp                    PACK_OUTPUT                  │
 └─────────────────────────────┬───────────────────────────────────┘
                               │
                               ▼
 ┌─────────────────────────────────────────────────────────────────┐
-│                          PACK                              │
+│                             PACK                                │
 │                                                                 │
 │  ┌───────────────────────────────────────────────────────────┐  │
 │  │ main.rs                                                   │  │
@@ -157,25 +157,25 @@ The `_logs_` infix in the archive name is intentional — it allows the existing
 │  ┌───────────────────────────▼───────────────────────────────┐  │
 │  │ archive.rs                                                │  │
 │  │ stream files into GzEncoder → tar::Builder                │  │
-│  │ write pack_logs_<timestamp>.tar.gz to output dir     │  │
+│  │ write pack_logs_<timestamp>.tar.gz to output dir          │  │
 │  └───────────────────────────┬───────────────────────────────┘  │
 │                              │                                  │
 └─────────────────────────────┼───────────────────────────────────┘
                               │
                               ▼
-                  pack_logs_<timestamp>.tar.gz
+                    pack_logs_<timestamp>.tar.gz
                               │
 ┌─────────────────────────────┼───────────────────────────────────┐
 │              ANSIBLE / stack-validation                         │
 │                             │                                   │
 │  ┌───────────────────────────▼───────────────────────────────┐  │
-│  │ pack_collect.yaml                                    │  │
+│  │ pack_collect.yaml                                         │  │
 │  │ podman run --privileged                                   │  │
 │  │   -v /host/path:/host/path:ro   (per input path)         │  │
 │  │   -v /tmp:/tmp                  (output, rw)             │  │
 │  │                                                           │  │
 │  │ sed rename →                                             │  │
-│  │   pack_<CLUSTER><CLUSTER_SUFFIX>_logs_<timestamp>    │  │
+│  │   pack_<CLUSTER><CLUSTER_SUFFIX>_logs_<timestamp>         │  │
 │  └───────────────────────────┬───────────────────────────────┘  │
 │                              │                                  │
 │  ┌───────────────────────────▼───────────────────────────────┐  │
@@ -283,10 +283,10 @@ This project is part of the SUSE Edge Support Tools collection.
 
 - 🦀 Built with **Rust** for performance and safety
 - 🔌 Designed to integrate natively with **stack-validation** Ansible pipelines
-- 📦 Pack it up and ship it out
+- 📦 Keeping it simple, one archive at a time
 
 ---
 
 **Made with ❤️ and 🦀 by the SUSE Support Team**
 
-*Pack it up and ship it out!* 📦
+*Pack it up and ship it out!* 📦✨
