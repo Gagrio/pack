@@ -21,12 +21,14 @@ pub fn create_archive(
     let summary = build_summary(entries, source_paths, timestamp);
     let summary_bytes = summary.as_bytes();
     let mut header = tar::Header::new_gnu();
-    header.set_path(format!("{}/collection-summary.yaml", top_dir))?;
     header.set_size(summary_bytes.len() as u64);
     header.set_mode(0o644);
-    header.set_cksum();
-    tar.append(&header, summary_bytes)
-        .context("Failed to add summary to archive")?;
+    tar.append_data(
+        &mut header,
+        format!("{}/collection-summary.yaml", top_dir),
+        summary_bytes,
+    )
+    .context("Failed to add summary to archive")?;
 
     for entry in entries {
         let archive_path = format!("{}/{}", top_dir, entry.archive_path);
