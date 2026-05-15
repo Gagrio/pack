@@ -34,13 +34,15 @@ pub fn create_archive(
         let archive_path = format!("{}/{}", top_dir, entry.archive_path);
 
         if entry.is_dir {
-            // Directory entries are skipped intentionally. append_path_with_name handles
-            // long paths via the GNU long name extension, but the equivalent for directories
-            // hits the 100-char tar path limit. Directories are created implicitly during
-            // extraction when their child files are extracted. As a result, empty directories
-            // will not appear in the output archive.
             continue;
         } else {
+            info!(
+                "Archiving [is_dir={}] archive_path='{}' (len={}) src='{}'",
+                entry.is_dir,
+                archive_path,
+                archive_path.len(),
+                entry.absolute_path.display()
+            );
             if let Err(e) = tar.append_path_with_name(&entry.absolute_path, &archive_path) {
                 let hint = if e.kind() == std::io::ErrorKind::PermissionDenied {
                     " — re-run with 'sudo podman run' to access root-only paths"
