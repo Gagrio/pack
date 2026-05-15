@@ -93,7 +93,7 @@ pub fn collect_paths(paths: &[String]) -> Result<Vec<CollectedEntry>> {
                         .io_error()
                         .is_some_and(|io| io.kind() == std::io::ErrorKind::PermissionDenied)
                     {
-                        " — re-run with 'sudo podman run' to access root-only paths"
+                        " — re-run with sudo to access root-only paths"
                     } else {
                         ""
                     };
