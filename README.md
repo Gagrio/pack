@@ -219,7 +219,7 @@ cargo build --release
 # Run tests
 cargo test
 
-# Format code
+# Format code (run before every commit to avoid CI failures)
 cargo fmt
 
 # Check for issues

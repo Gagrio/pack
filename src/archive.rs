@@ -32,13 +32,12 @@ pub fn create_archive(
         let archive_path = format!("{}/{}", top_dir, entry.archive_path);
 
         if entry.is_dir {
-            if let Err(e) = tar.append_dir(&archive_path, &entry.absolute_path) {
-                warn!(
-                    "Skipping directory {}: {} — could not be added to archive",
-                    entry.absolute_path.display(),
-                    e
-                );
-            }
+            // Directory entries are skipped intentionally. append_path_with_name handles
+            // long paths via the GNU long name extension, but the equivalent for directories
+            // hits the 100-char tar path limit. Directories are created implicitly during
+            // extraction when their child files are extracted. As a result, empty directories
+            // will not appear in the output archive.
+            continue;
         } else {
             if let Err(e) = tar.append_path_with_name(&entry.absolute_path, &archive_path) {
                 let hint = if e.kind() == std::io::ErrorKind::PermissionDenied {
