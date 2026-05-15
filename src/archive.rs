@@ -30,6 +30,13 @@ pub fn create_archive(
     )
     .context("Failed to add summary to archive")?;
 
+    info!(
+        "Summary entry added. Processing {} entries ({} dirs, {} files)",
+        entries.len(),
+        entries.iter().filter(|e| e.is_dir).count(),
+        entries.iter().filter(|e| !e.is_dir).count()
+    );
+
     for entry in entries {
         let archive_path = format!("{}/{}", top_dir, entry.archive_path);
 
