@@ -1,7 +1,7 @@
 use crate::collector::CollectedEntry;
 use anyhow::{Context, Result};
 use std::fs;
-use tracing::info;
+use tracing::{info, warn};
 
 pub fn create_archive(
     entries: &[CollectedEntry],
@@ -32,20 +32,27 @@ pub fn create_archive(
         let archive_path = format!("{}/{}", top_dir, entry.archive_path);
 
         if entry.is_dir {
-            let mut header = tar::Header::new_gnu();
-            header.set_path(&archive_path)?;
-            header.set_entry_type(tar::EntryType::Directory);
-            header.set_mode(0o755);
-            header.set_size(0);
-            header.set_cksum();
-            tar.append(&header, &[][..])
-                .context(format!("Failed to add directory: {}", archive_path))?;
+            if let Err(e) = tar.append_dir(&archive_path, &entry.absolute_path) {
+                warn!(
+                    "Skipping directory {}: {} — could not be added to archive",
+                    entry.absolute_path.display(),
+                    e
+                );
+            }
         } else {
-            tar.append_path_with_name(&entry.absolute_path, &archive_path)
-                .context(format!(
-                    "Failed to add file: {}",
-                    entry.absolute_path.display()
-                ))?;
+            if let Err(e) = tar.append_path_with_name(&entry.absolute_path, &archive_path) {
+                let hint = if e.kind() == std::io::ErrorKind::PermissionDenied {
+                    " — re-run with 'sudo podman run' to access root-only paths"
+                } else {
+                    ""
+                };
+                warn!(
+                    "Skipping {}: {}{} — file could not be read",
+                    entry.absolute_path.display(),
+                    e,
+                    hint
+                );
+            }
         }
     }
 
