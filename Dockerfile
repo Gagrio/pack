@@ -10,9 +10,12 @@ RUN rm src/main.rs
 
 # Build with real source
 COPY src ./src
-RUN touch src/main.rs && cargo build --release
+RUN find src -name "*.rs" | xargs touch && cargo build --release
 
 FROM registry.suse.com/bci/bci-micro:latest
+
+ARG REVISION=unknown
+LABEL org.opencontainers.image.revision=$REVISION
 
 COPY --from=builder /app/target/release/pack /usr/local/bin/pack
 
