@@ -2,15 +2,9 @@ FROM registry.suse.com/bci/rust:latest AS builder
 
 WORKDIR /app
 
-# Copy manifests first — dependencies built separately for layer caching
-COPY Cargo.toml Cargo.lock* ./
-RUN mkdir src && echo "fn main() {}" > src/main.rs
-RUN cargo build --release
-RUN rm src/main.rs
-
-# Build with real source
+COPY Cargo.toml Cargo.lock ./
 COPY src ./src
-RUN find src -name "*.rs" | xargs touch && cargo build --release
+RUN cargo build --release
 
 FROM registry.suse.com/bci/bci-micro:latest
 
