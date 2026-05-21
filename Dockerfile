@@ -1,4 +1,4 @@
-FROM registry.suse.com/bci/rust:latest AS builder
+FROM registry.suse.com/bci/rust:1.94 AS builder
 
 WORKDIR /app
 
@@ -6,7 +6,7 @@ COPY Cargo.toml Cargo.lock ./
 COPY src ./src
 RUN cargo build --release
 
-FROM registry.suse.com/bci/bci-micro:latest
+FROM registry.suse.com/bci/bci-micro:16.0
 
 ARG REVISION=unknown
 LABEL org.opencontainers.image.revision=$REVISION
