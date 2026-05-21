@@ -1,4 +1,4 @@
-name: 🧪 Code Quality Check
+name: 🧪 Quality Checks
 
 on:
   push:
@@ -6,23 +6,38 @@ on:
     paths:
       - 'src/**'
       - 'Cargo.toml'
-      - '.github/workflows/pack-code-checks.yaml'
+      - 'Cargo.lock'
+      - 'Dockerfile'
+      - '.github/workflows/*.yaml'
   pull_request:
     branches: [ master ]
     paths:
       - 'src/**'
       - 'Cargo.toml'
-      - '.github/workflows/pack-code-checks.yaml'
+      - 'Cargo.lock'
+      - 'Dockerfile'
+      - '.github/workflows/*.yaml'
   workflow_dispatch:
 
 jobs:
-  code-quality:
-    name: Check code quality
+  quality-checks:
+    name: Quality checks
     runs-on: ubuntu-latest
 
     steps:
       - name: 📥 Checkout repository
         uses: actions/checkout@v4
+
+      - name: 🐳 Lint Dockerfile
+        uses: hadolint/hadolint-action@v3.1.0
+        with:
+          dockerfile: Dockerfile
+
+      - name: 🔍 Lint GitHub Actions workflows
+        uses: rhysd/actionlint@v1.7.7
+
+      # TODO(prod): gate the steps below with an `if` condition so Rust checks
+      # only run when src/**, Cargo.toml, or Cargo.lock are changed.
 
       - name: 🦀 Install Rust toolchain
         uses: dtolnay/rust-toolchain@stable
