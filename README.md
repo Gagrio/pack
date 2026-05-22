@@ -181,7 +181,7 @@ pack_logs_2025-11-12_14-30-00/
 podman run --rm --privileged \
            -v /var/lib/rancher/rke2/server/db/etcd:/var/lib/rancher/rke2/server/db/etcd:ro \
            -v /tmp:/tmp \
-           pack:latest \
+           ghcr.io/gagrio/pack:latest \
            --paths /var/lib/rancher/rke2/server/db/etcd --output /tmp
 ```
 
@@ -190,7 +190,7 @@ podman run --rm --privileged \
 podman run --rm --privileged \
            -v /var/lib/rancher/k3s/server/db/etcd:/var/lib/rancher/k3s/server/db/etcd:ro \
            -v /tmp:/tmp \
-           pack:latest \
+           ghcr.io/gagrio/pack:latest \
            --paths /var/lib/rancher/k3s/server/db/etcd --output /tmp
 ```
 
@@ -200,7 +200,7 @@ podman run --rm --privileged \
            -v /var/lib/rancher/rke2/server/db/etcd:/var/lib/rancher/rke2/server/db/etcd:ro \
            -v /var/log/pods:/var/log/pods:ro \
            -v /tmp:/tmp \
-           pack:latest \
+           ghcr.io/gagrio/pack:latest \
            --paths /var/lib/rancher/rke2/server/db/etcd,/var/log/pods \
            --output /tmp --verbose
 ```
