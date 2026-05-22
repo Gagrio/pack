@@ -25,6 +25,13 @@ A blazingly fast 🦀 Rust-powered tool that collects arbitrary host paths and a
 ### Quick Start with Container
 
 ```bash
+# Sanity check — verify the tool works on any machine
+sudo podman run --rm --privileged \
+           -v /var/log:/var/log:ro \
+           -v /tmp:/tmp \
+           ghcr.io/gagrio/pack:latest \
+           --paths /var/log --output /tmp --verbose
+
 # Collect a single path
 podman run --rm --privileged \
            -v /var/lib/rancher/rke2/server/db/etcd:/var/lib/rancher/rke2/server/db/etcd:ro \
